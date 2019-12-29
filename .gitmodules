@@ -1,0 +1,6 @@
+[submodule "certificate-transparency-go"]
+	path = certificate-transparency-go
+	url = https://github.com/zorawar87/certificate-transparency-go
+[submodule "trillian"]
+	path = trillian
+	url = https://github.com/zorawar87/trillian
