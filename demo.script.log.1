@@ -1,0 +1,171 @@
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# ./trillian/integration/demo-script.sh 
+Prepared before demo: edit trillian/integration/demo-script.cfg to fill in local GOPATH
+-----------------------------------------------
++ echo 'Reset MySQL database'
+Reset MySQL database
++ yes
++ /go/src/github.com/zorawar87/trillian/scripts/resetdb.sh
+./trillian/integration/demo-script.sh: line 27: /go/src/github.com/zorawar87/trillian/scripts/resetdb.sh: No such file or directory
++ echo 'Building Trillian log code'
+Building Trillian log code
++ echo 'Start a Trillian Log server (do in separate terminal)'
+Start a Trillian Log server (do in separate terminal)
++ echo 'Start a Trillian Log signer (do in separate terminal)'
+Start a Trillian Log signer (do in separate terminal)
++ echo 'Wait for things to come up'
+Wait for things to come up
++ echo 'Building provisioning tool'
+Building provisioning tool
++ echo 'Provision a log and remember the its tree ID'
+Provision a log and remember the its tree ID
++ tree_id=4253356995793753870
++ echo 4253356995793753870
+4253356995793753870
++ echo 'Manually edit CT config file to put the tree ID value in place of @TREE_ID@'
+Manually edit CT config file to put the tree ID value in place of @TREE_ID@
++ sed -i.bak 1,/@TREE_ID@/s/@TREE_ID@/4253356995793753870/ demo-script.cfg
++ echo 'Building CT personality code'
+Building CT personality code
++ echo 'Running the CT personality (do in separate terminal)'
+Running the CT personality (do in separate terminal)
++ ct_pid=409
++ sleep 5
++ ct_server --log_config=demo-script.cfg --log_rpc_server=localhost:6962 --http_endpoint=localhost:6965
++ echo 'Log is now accessible -- see in browser window'
+Log is now accessible -- see in browser window
++ curl http://localhost:6965/athos/ct/v1/get-sth
+curl: (7) Failed to connect to localhost port 6965: Connection refused
++ echo 'But is has no data, so building the Hammer test tool'
+But is has no data, so building the Hammer test tool
++ go build github.com/google/certificate-transparency-go/trillian/integration/ct_hammer
+go: downloading github.com/juju/ratelimit v1.0.1
+go: downloading github.com/grpc-ecosystem/go-grpc-middleware v1.1.0
+go: downloading cloud.google.com/go/spanner v1.1.0
+go: downloading github.com/google/btree v1.0.0
+go: downloading github.com/golang/mock v1.3.1
+go: downloading github.com/lib/pq v1.2.0
+go: downloading github.com/kylelemons/godebug v1.1.0
+go: downloading github.com/go-sql-driver/mysql v1.4.1
++ echo 'Hammer time'
+Hammer time
++ hammer_pid=956
++ echo 'After waiting for a while, refresh the browser window to see a bigger tree'
+After waiting for a while, refresh the browser window to see a bigger tree
++ sleep 5
++ ./ct_hammer --log_config demo-script.cfg --ct_http_servers=localhost:6965 --mmd=30s --testdata_dir=/go/src/github.com/google/certificate-transparency-go/trillian/testdata --logtostderr
+Today's test has been brought to you by the letters C and T and the number 0x39f00e76
+I1230 06:45:38.020008     956 main.go:199] Testing with synthetic certs based on data from /go/src/github.com/google/certificate-transparency-go/trillian/testdata
+
+
+Stop........
+                                   ':++/.
+                                  'sddhhyo'
+                                  /hyyho+s-       '-:/+:.
+                                 .sdhhysoy-  ' '/sdmNNmmy'
+                             ':oooymmmdddmysymhmNNNNNNNh-
+                      '.:::+so++++ymmmNNNdyyyNNNNNMMNd/'
+             '...:::/://osoo++s+yyhmNNNMmdddhyymNNhs+.
+     '..-://+++/////+//+sooosyyhdmmdNNNMmmmhhs+y/-'
+    'oooooooo++++++/ossyyyyhhhhdddyymNNmhdmmdy:-'
+  ':ohhso++/++//+/+/////:oyyyddhhy+/hmNNNMMMmo-'
+  -hddo-''               +syyhhyyy+:ymNNMMNms:'
+  'ss+'                  /sssyssyyo/sdmmmds+/.
+   ''                    +sssssyyyysyhhyys+:.'
+                         +ssyyssoosoosss+/:.'
+                        -yyyyysooso+so+/::-'
+                        smmdhyssssoso+//:-'
+                       -mNMMMNdyssyso+/:.'
+                   ':shmMMMMMMMMNMMNmo.
+                  -hNMMMMMMMMMMMMMMMMd/'
+                 .hNMMMMMMMMMMMMMMMMMMNy/.
+                .yNMMMMMMMMMMMMMMMMMMMMMMd:
+              .omMMMMMMMMMMMMMMMMMMMMNMMMMNo'
+            .omMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy.
+           -dNMMMMMMMMMMMMMMMMMNNMMMMMNMMMMMMy'
+          :dMMMMMMMMMMMMMMMMMMMNmNMMMMNNMMMMMN/
+         .dMMMMMMMMMMMMMMMMMMMNmmMMMMMMMMMMMMMs'
+         +NMMMMMMMMMMMMNmMMMMMNmNMMMMMMMMMMMMMy'
+         -mMMMMMMMMMMMMMMMMMMMNNMMMMMMMMMMMMMMo'
+         'hNMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNMNNh.
+          sNMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNmh+.
+          /NMMMMMMMMMMMMMMMMMNdmNMMMMMNNNm:
+          -mMMMMMMMMMMMMMMNms-''/mMMMNddNm-
+           oNMMMMMMMMMMMMd/'     +NMMNddmm:
+           -mMMMMMMMMMMMN+'      'sNMMMNNmy-
+            sNMMMMMMMMMNd.        'sNNMNNNmh-
+            :NMMMMMMMMNm:          'yNNMMNNmy'
+            'yNMMMMMMMNo'           .hNMMMNNm.
+             .dMMMMMNNy'             -dNMMNNN:
+              oNMMMNNm-               /NNMMNN/
+              :NMMMMNh.                yNMMNms'
+              :mMMMNN/                 -mMMMNy'
+              'yNMmho'                  sNNmNNs.
+            ''/mMMMmy'                  -mNMMMMNdhhy+'
+          .yNNMMMMMNm+'                 /NMMMNNNmdy+-
+           :hNNMMMNdd/'                 /dmNNdso+:.'
+
+Hammer Time
+
+I1230 06:45:38.830791     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+2019-12-30 06:45:38.834824 I | Request to http://localhost:6965/athos failed, backing-off 1s: Post http://localhost:6965/athos/ct/v1/add-pre-chain: dial tcp 127.0.0.1:6965: connect: connection refused
+2019-12-30 06:45:40.030558 I | Request to http://localhost:6965/athos failed, backing-off 2s: Post http://localhost:6965/athos/ct/v1/add-pre-chain: dial tcp 127.0.0.1:6965: connect: connection refused
+2019-12-30 06:45:42.266149 I | Request to http://localhost:6965/athos failed, backing-off 4s: Post http://localhost:6965/athos/ct/v1/add-pre-chain: dial tcp 127.0.0.1:6965: connect: connection refused
++ curl http://localhost:6965/athos/ct/v1/get-sth
+curl: (7) Failed to connect to localhost port 6965: Connection refused
++ echo 'Stop and restart the CT personality to use the new config (note changed --log_config)'
+Stop and restart the CT personality to use the new config (note changed --log_config)
++ kill -9 409
++ sleep 5
+2019-12-30 06:45:46.356540 I | Request to http://localhost:6965/athos failed, backing-off 8s: Post http://localhost:6965/athos/ct/v1/add-pre-chain: dial tcp 127.0.0.1:6965: connect: connection refused
+./trillian/integration/demo-script.sh: line 92:   409 Killed                  ct_server --log_config=demo-script.cfg --log_rpc_server=localhost:6962 --http_endpoint=localhost:6965
++ echo 'Remember to kill off all of the jobs, so their (hard-coded) ports get freed up.  Shortcut:'
+Remember to kill off all of the jobs, so their (hard-coded) ports get freed up.  Shortcut:
++ /go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 3: killall: command not found
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 4: killall: command not found
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 5: killall: command not found
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 6: killall: command not found
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 7: killall: command not found
++ echo '...but ct_killall does not kill the hammer'
+...but ct_killall does not kill the hammer
++ killall -9 ct_hammer
+./trillian/integration/demo-script.sh: line 107: killall: command not found
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# I1230 06:45:48.830105     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+2019-12-30 06:45:54.577591 I | Request to http://localhost:6965/athos failed, backing-off 16s: Post http://localhost:6965/athos/ct/v1/add-pre-chain: dial tcp 127.0.0.1:6965: connect: connection refused
+I1230 06:45:58.830176     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# I1230 06:46:08.830240     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+2019-12-30 06:46:10.758658 I | Request to http://localhost:6965/athos failed, backing-off 32s: Post http://localhost:6965/athos/ct/v1/add-pre-chain: dial tcp 127.0.0.1:6965: connect: connection refused
+I1230 06:46:18.830142     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:46:28.830302     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:46:38.830151     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+2019-12-30 06:46:42.915778 I | Request to http://localhost:6965/athos failed, backing-off 1m4s: Post http://localhost:6965/athos/ct/v1/add-pre-chain: dial tcp 127.0.0.1:6965: connect: connection refused
+I1230 06:46:48.830072     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:46:58.831349     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:47:08.830143     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:47:18.830125     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:47:28.830135     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:47:38.830149     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+2019-12-30 06:47:47.166173 I | Request to http://localhost:6965/athos failed, backing-off 2m8s: Post http://localhost:6965/athos/ct/v1/add-pre-chain: dial tcp 127.0.0.1:6965: connect: connection refused
+I1230 06:47:48.830061     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:47:58.830132     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:48:08.830143     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:48:18.830149     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:48:28.830057     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:48:38.830040     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+I1230 06:48:48.830093     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+^C
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# kill
+kill      killall5  
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# kill I1230 06:48:58.830078     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+jobs
+bash: kill: jobs: arguments must be process or job IDs
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# jobs
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# I1230 06:49:08.830145     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+jobs
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# pgrep hammerI1230 06:49:18.830124     956 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=0 invalid=1 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+
+956
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# kill 956
+root@8c5c9639f447:/go/src/github.com/zorawar87/certificate-transparency-go# 
+

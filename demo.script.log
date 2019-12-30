@@ -1,0 +1,96 @@
+root@5aa8c38816a5:/go/src/github.com/zorawar87/certificate-transparency-go# ./trillian/integration/demo-script.sh 
+Prepared before demo: edit trillian/integration/demo-script.cfg to fill in local GOPATH
+-----------------------------------------------
++ echo 'Provision a log and remember the its tree ID'
+Provision a log and remember the its tree ID
++ tree_id=4253356995793753870
++ echo 4253356995793753870
+4253356995793753870
++ echo 'Manually edit CT config file to put the tree ID value in place of @TREE_ID@'
+Manually edit CT config file to put the tree ID value in place of @TREE_ID@
++ sed -i.bak 1,/@TREE_ID@/s/@TREE_ID@/4253356995793753870/ demo-script.cfg
++ echo 'Running the CT personality (do in separate terminal)'
+Running the CT personality (do in separate terminal)
++ ct_pid=1141
++ sleep 5
++ ct_server --log_config=demo-script.cfg --log_rpc_server=3f13b5e642df:8090 --http_endpoint=localhost:6965
++ echo 'Log is now accessible -- see in browser window'
+Log is now accessible -- see in browser window
++ curl http://localhost:6965/athos/ct/v1/get-sth
+{"tree_size":529,"timestamp":1577694359077,"sha256_root_hash":"iD8hGM+6DAnvv5SVui3q4W2hOzSP6SnUCzG2ECXnH1Q=","tree_head_signature":"BAMARzBFAiBVH51Whbyxa0WC2p95wMWQm0Z4PQYMNoZe9NeRO7Je+wIhAJODlcF/nwfAwbyKRMd2kNNlJmQoVPwiv3ozx93gL6zJ"}+ echo 'But is has no data, so building the Hammer test tool'
+But is has no data, so building the Hammer test tool
++ go build github.com/google/certificate-transparency-go/trillian/integration/ct_hammer
++ echo 'Hammer time'
+Hammer time
++ hammer_pid=1211
++ echo 'After waiting for a while, refresh the browser window to see a bigger tree'
+After waiting for a while, refresh the browser window to see a bigger tree
++ sleep 5
++ ./ct_hammer --log_config demo-script.cfg --ct_http_servers=localhost:6965 --mmd=30s --testdata_dir=/go/src/github.com/google/certificate-transparency-go/trillian/testdata --logtostderr
+Today's test has been brought to you by the letters C and T and the number 0xbcfa01c3
+I1230 08:27:53.431949    1211 main.go:199] Testing with synthetic certs based on data from /go/src/github.com/google/certificate-transparency-go/trillian/testdata
+
+
+Stop........
+                                   ':++/.
+                                  'sddhhyo'
+                                  /hyyho+s-       '-:/+:.
+                                 .sdhhysoy-  ' '/sdmNNmmy'
+                             ':oooymmmdddmysymhmNNNNNNNh-
+                      '.:::+so++++ymmmNNNdyyyNNNNNMMNd/'
+             '...:::/://osoo++s+yyhmNNNMmdddhyymNNhs+.
+     '..-://+++/////+//+sooosyyhdmmdNNNMmmmhhs+y/-'
+    'oooooooo++++++/ossyyyyhhhhdddyymNNmhdmmdy:-'
+  ':ohhso++/++//+/+/////:oyyyddhhy+/hmNNNMMMmo-'
+  -hddo-''               +syyhhyyy+:ymNNMMNms:'
+  'ss+'                  /sssyssyyo/sdmmmds+/.
+   ''                    +sssssyyyysyhhyys+:.'
+                         +ssyyssoosoosss+/:.'
+                        -yyyyysooso+so+/::-'
+                        smmdhyssssoso+//:-'
+                       -mNMMMNdyssyso+/:.'
+                   ':shmMMMMMMMMNMMNmo.
+                  -hNMMMMMMMMMMMMMMMMd/'
+                 .hNMMMMMMMMMMMMMMMMMMNy/.
+                .yNMMMMMMMMMMMMMMMMMMMMMMd:
+              .omMMMMMMMMMMMMMMMMMMMMNMMMMNo'
+            .omMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy.
+           -dNMMMMMMMMMMMMMMMMMNNMMMMMNMMMMMMy'
+          :dMMMMMMMMMMMMMMMMMMMNmNMMMMNNMMMMMN/
+         .dMMMMMMMMMMMMMMMMMMMNmmMMMMMMMMMMMMMs'
+         +NMMMMMMMMMMMMNmMMMMMNmNMMMMMMMMMMMMMy'
+         -mMMMMMMMMMMMMMMMMMMMNNMMMMMMMMMMMMMMo'
+         'hNMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNMNNh.
+          sNMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNmh+.
+          /NMMMMMMMMMMMMMMMMMNdmNMMMMMNNNm:
+          -mMMMMMMMMMMMMMMNms-''/mMMMNddNm-
+           oNMMMMMMMMMMMMd/'     +NMMNddmm:
+           -mMMMMMMMMMMMN+'      'sNMMMNNmy-
+            sNMMMMMMMMMNd.        'sNNMNNNmh-
+            :NMMMMMMMMNm:          'yNNMMNNmy'
+            'yNMMMMMMMNo'           .hNMMMNNm.
+             .dMMMMMNNy'             -dNMMNNN:
+              oNMMMNNm-               /NNMMNN/
+              :NMMMMNh.                yNMMNms'
+              :mMMMNN/                 -mMMMNy'
+              'yNMmho'                  sNNmNNs.
+            ''/mMMMmy'                  -mNMMMMNdhhy+'
+          .yNNMMMMMNm+'                 /NMMMNNNmdy+-
+           :hNNMMMNdd/'                 /dmNNdso+:.'
+
+Hammer Time
+
+I1230 08:27:54.248755    1211 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=1 invalid=0 errs=0 AddChain=0/0 AddPreChain=0/0 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=1/1
++ curl http://localhost:6965/athos/ct/v1/get-sth
+{"tree_size":670,"timestamp":1577694478459,"sha256_root_hash":"SfPjvbauBckioC5gwu/E4S7126aE92GgV/Cw3EEpOCk=","tree_head_signature":"BAMARjBEAiA0Joc9uwNrmHueJ/uO25PoT6DesudP+/NNq30KjWld+QIgIZAiAcOippG+jVlIL7BbH8ipe2wenliHF29UOT0FDgE="}+ sleep 10
+I1230 08:28:04.267440    1211 hammer.go:1087]      athos: lastSTH.size=843 ops: total=275 invalid=29 errs=0 AddChain=114/114 AddPreChain=109/109 GetSTH=16/16 GetSTHConsistency=10/13 GetProofByHash=0/6 GetEntries=11/12 GetRoots=5/5
++ kill -9 1211
++ echo 'Stop and restart the CT personality to use the new config (note changed --log_config)'
+Stop and restart the CT personality to use the new config (note changed --log_config)
++ kill -9 1141
++ echo 'done.... sleeping for 30s'
+done.... sleeping for 30s
++ sleep 30
+./trillian/integration/demo-script.sh: line 102:  1141 Killed                  ct_server --log_config=demo-script.cfg --log_rpc_server=3f13b5e642df:8090 --http_endpoint=localhost:6965
+./trillian/integration/demo-script.sh: line 102:  1211 Killed                  ./ct_hammer --log_config demo-script.cfg --ct_http_servers=localhost:6965 --mmd=30s --testdata_dir=${GOPATH}/src/github.com/google/certificate-transparency-go/trillian/testdata --logtostderr
+root@5aa8c38816a5:/go/src/github.com/zorawar87/certificate-transparency-go# 
