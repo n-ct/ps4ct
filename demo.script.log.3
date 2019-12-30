@@ -1,0 +1,110 @@
+root@266fb0a96c99:/go/src/github.com/zorawar87/certificate-transparency-go# ./trillian/integration/demo-script.sh 
+Prepared before demo: edit trillian/integration/demo-script.cfg to fill in local GOPATH
+-----------------------------------------------
++ echo 'Provision a log and remember the its tree ID'
+Provision a log and remember the its tree ID
++ tree_id=2114951612293868876
++ echo 2114951612293868876
+2114951612293868876
++ echo 'Manually edit CT config file to put the tree ID value in place of @TREE_ID@'
+Manually edit CT config file to put the tree ID value in place of @TREE_ID@
++ sed -i.bak 1,/@TREE_ID@/s/@TREE_ID@/2114951612293868876/ demo-script.cfg
++ echo 'Running the CT personality (do in separate terminal)'
+Running the CT personality (do in separate terminal)
++ ct_pid=467
++ ct_server --log_config=demo-script.cfg --log_rpc_server=0955c605257d:8090 --http_endpoint=localhost:6965
++ sleep 5
++ echo 'Log is now accessible -- see in browser window'
+Log is now accessible -- see in browser window
++ curl http://localhost:6965/athos/ct/v1/get-sth
+{"tree_size":0,"timestamp":1577718106719,"sha256_root_hash":"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=","tree_head_signature":"BAMARzBFAiBcJfMuGkFc5fN0yTCQtvfLdqBZsNZaMiVxdcbqJNSUDAIhAOUIFqR5fpv7Hk7ugo4NAWcwxOdUN1wRuXx24qF08aK7"}+ echo 'But is has no data, so building the Hammer test tool'
+But is has no data, so building the Hammer test tool
++ go build github.com/google/certificate-transparency-go/trillian/integration/ct_hammer
+go: downloading cloud.google.com/go/spanner v1.1.0
++ echo 'Hammer time'
+Hammer time
++ hammer_pid=1002
++ echo 'After waiting for a while, refresh the browser window to see a bigger tree'
+After waiting for a while, refresh the browser window to see a bigger tree
++ sleep 5
++ ./ct_hammer --log_config demo-script.cfg --ct_http_servers=localhost:6965 --mmd=30s --testdata_dir=/go/src/github.com/google/certificate-transparency-go/trillian/testdata --logtostderr
+Today's test has been brought to you by the letters C and T and the number 0xd2e15211
+I1230 15:17:33.897024    1002 main.go:199] Testing with synthetic certs based on data from /go/src/github.com/google/certificate-transparency-go/trillian/testdata
+
+
+Stop........
+                                   ':++/.
+                                  'sddhhyo'
+                                  /hyyho+s-       '-:/+:.
+                                 .sdhhysoy-  ' '/sdmNNmmy'
+                             ':oooymmmdddmysymhmNNNNNNNh-
+                      '.:::+so++++ymmmNNNdyyyNNNNNMMNd/'
+             '...:::/://osoo++s+yyhmNNNMmdddhyymNNhs+.
+     '..-://+++/////+//+sooosyyhdmmdNNNMmmmhhs+y/-'
+    'oooooooo++++++/ossyyyyhhhhdddyymNNmhdmmdy:-'
+  ':ohhso++/++//+/+/////:oyyyddhhy+/hmNNNMMMmo-'
+  -hddo-''               +syyhhyyy+:ymNNMMNms:'
+  'ss+'                  /sssyssyyo/sdmmmds+/.
+   ''                    +sssssyyyysyhhyys+:.'
+                         +ssyyssoosoosss+/:.'
+                        -yyyyysooso+so+/::-'
+                        smmdhyssssoso+//:-'
+                       -mNMMMNdyssyso+/:.'
+                   ':shmMMMMMMMMNMMNmo.
+                  -hNMMMMMMMMMMMMMMMMd/'
+                 .hNMMMMMMMMMMMMMMMMMMNy/.
+                .yNMMMMMMMMMMMMMMMMMMMMMMd:
+              .omMMMMMMMMMMMMMMMMMMMMNMMMMNo'
+            .omMMMMMMMMMMMMMMMMMMMMMMMMMMMMMy.
+           -dNMMMMMMMMMMMMMMMMMNNMMMMMNMMMMMMy'
+          :dMMMMMMMMMMMMMMMMMMMNmNMMMMNNMMMMMN/
+         .dMMMMMMMMMMMMMMMMMMMNmmMMMMMMMMMMMMMs'
+         +NMMMMMMMMMMMMNmMMMMMNmNMMMMMMMMMMMMMy'
+         -mMMMMMMMMMMMMMMMMMMMNNMMMMMMMMMMMMMMo'
+         'hNMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNMNNh.
+          sNMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNmh+.
+          /NMMMMMMMMMMMMMMMMMNdmNMMMMMNNNm:
+          -mMMMMMMMMMMMMMMNms-''/mMMMNddNm-
+           oNMMMMMMMMMMMMd/'     +NMMNddmm:
+           -mMMMMMMMMMMMN+'      'sNMMMNNmy-
+            sNMMMMMMMMMNd.        'sNNMNNNmh-
+            :NMMMMMMMMNm:          'yNNMMNNmy'
+            'yNMMMMMMMNo'           .hNMMMNNm.
+             .dMMMMMNNy'             -dNMMNNN:
+              oNMMMNNm-               /NNMMNN/
+              :NMMMMNh.                yNMMNms'
+              :mMMMNN/                 -mMMMNy'
+              'yNMmho'                  sNNmNNs.
+            ''/mMMMmy'                  -mNMMMMNdhhy+'
+          .yNNMMMMMNm+'                 /NMMMNNNmdy+-
+           :hNNMMMNdd/'                 /dmNNdso+:.'
+
+Hammer Time
+
+I1230 15:17:34.787290    1002 hammer.go:1087]      athos: lastSTH.size=n/a ops: total=1 invalid=0 errs=0 AddChain=0/0 AddPreChain=1/1 GetSTH=0/0 GetSTHConsistency=0/0 GetProofByHash=0/0 GetEntries=0/0 GetRoots=0/0
+E1230 15:17:35.056939    1002 hammer.go:425] athos: add-chain(NewCert): error got HTTP status "500 Internal Server Error" HTTP status 500 body Internal Server Error
+backend QueueLeaves request failed: rpc error: code = Unknown desc = Error 1114: The table 'LeafData' is full
+I1230 15:17:35.057157    1002 main.go:318] completed tests on all 1 logs:
+E1230 15:17:35.057288    1002 main.go:324]   athos: failed with failed to add-chain(NewCert): got HTTP status "500 Internal Server Error"
+F1230 15:17:35.057344    1002 main.go:328] non-zero error count (1), exiting
++ curl http://localhost:6965/athos/ct/v1/get-sth
+{"tree_size":12,"timestamp":1577719055174,"sha256_root_hash":"rXgf0vrLdwb8ywIBCriphFgB9EXO+psIjyPqbPdG31k=","tree_head_signature":"BAMARzBFAiEAhE+x6O+hVGIcDWS3MzdUxFK63kEqRbRZxfAtsQvSTDECIC9MsENv++tQ45Uuk8SOt+15m4VzMpaVRrSLFpsfLFWS"}+ sleep 10
++ echo 'Now lets add another log.  First kill the hammer'
+Now lets add another log.  First kill the hammer
++ kill -9 1002
+./trillian/integration/demo-script.sh: line 79: kill: (1002) - No such process
++ kill -9 467
++ sleep 5
+./trillian/integration/demo-script.sh: line 92:   467 Killed                  ct_server --log_config=demo-script.cfg --log_rpc_server=0955c605257d:8090 --http_endpoint=localhost:6965
++ echo 'Done! Waiting and then cleaning up'
+Done! Waiting and then cleaning up
++ sleep 30
++ echo 'Remember to kill off all of the jobs, so their (hard-coded) ports get freed up.  Shortcut:'
+Remember to kill off all of the jobs, so their (hard-coded) ports get freed up.  Shortcut:
++ /go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 3: killall: command not found
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 4: killall: command not found
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 5: killall: command not found
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 6: killall: command not found
+/go/src/github.com/google/certificate-transparency-go/trillian/integration/ct_killall.sh: line 7: killall: command not found
+root@266fb0a96c99:/go/src/github.com/zorawar87/certificate-transparency-go#
