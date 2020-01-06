@@ -24,7 +24,7 @@ function create_tree(){
     echo "creating merkle tree"
     # admin_server is hardlinked to tlserver hostname
     # this will print out the tree_id created. required for later steps
-    createtree --admin_server=tlserver:8090 --private_key_format=PrivateKey --pem_key_path=/go/src/github.com/google/trillian/testdata/log-rpc-server.privkey.pem --pem_key_password=towel --signature_algorithm=ECDSA
+    createtree --admin_server=tlserver:8090 --private_key_format=PrivateKey --pem_key_path=/go/src/github.com/zorawar87/trillian/testdata/log-rpc-server.privkey.pem --pem_key_password=towel --signature_algorithm=ECDSA
 }
 
 function tlserver(){
@@ -39,6 +39,7 @@ function tlsigner(){
 
 function ctserver(){
     echo "ct_server is (probably) good to go!"
+    sh -c "./trillian/integration/demo-script.sh"
 }
 
 while test $# -gt 0

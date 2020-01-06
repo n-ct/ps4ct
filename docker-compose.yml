@@ -24,7 +24,7 @@ services:
     tlsigner:
         build: . 
         working_dir: /go/src/github.com/zorawar87/trillian/
-        command: ["--createtree","--tlsigner"]
+        command: ["--tlsigner"]
         restart: always
         environment:
         - MYSQL_HOST=mysql
@@ -41,7 +41,7 @@ services:
 
     ct:
         build: .
-        working_dir: /go/src/github.com/zorawar87/certificate-transparency-ct/
+        working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
         command: ["bash"]
         restart: always
         environment:
