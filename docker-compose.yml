@@ -51,8 +51,8 @@ services:
         - MYSQL_DATABASE=cttest
         - MYSQL_PASSWORD=zaphod
         ports:
-        - '8090:6962'
-        - '8091:6965'
+        - '6962:6962'
+        - '6965:6965'
         expose:
         - '6962'
         - '6965'
