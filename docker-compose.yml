@@ -1,48 +1,36 @@
 services:
-    core:
-        build:
-            context: ./trillian/
-            dockerfile: ./config/core/Dockerfile
-            args:
-            - GOFLAGS
-        environment:
-        - MYSQL_HOST=mysql
-        - MYSQL_ROOT_PASSWORD=beeblebrox
-        - MYSQL_USER=test
-        - MYSQL_DATABASE=cttest
-        - MYSQL_PASSWORD=zaphod
-        restart: always
-        depends_on:
-        - mysql
-
     tlserver:
         build:
             context: ./trillian/
-            dockerfile: ./config/tlserver/Dockerfile
             args:
             - GOFLAGS
+        working_dir: /go/src/github.com/zorawar87/trillian/
+        command: ["--install-trillian", "--resetdb", "--tlserver"]
+        restart: always
         environment:
         - MYSQL_HOST=mysql
         - MYSQL_ROOT_PASSWORD=beeblebrox
         - MYSQL_USER=test
         - MYSQL_DATABASE=cttest
         - MYSQL_PASSWORD=zaphod
-        restart: always
         ports:
         - '8090:8090'
         - '8091:8091'
         expose:
         - '8090'
         - '8091'
+        volumes:
+        - source_code:/go
         depends_on:
         - mysql
 
     tlsigner:
         build:
             context: ./trillian
-            dockerfile: ./config/tlsigner/Dockerfile
             args:
             - GOFLAGS
+        working_dir: /go/src/github.com/zorawar87/trillian/
+        command: ["--createtree", "--tlsigner"]
         restart: always
         environment:
         - MYSQL_HOST=mysql
@@ -52,12 +40,16 @@ services:
         - MYSQL_PASSWORD=zaphod
         ports:
         - '8092:8091'
+        volumes:
+        - source_code:/go
         depends_on:
-        - mysql
+        - tlserver
 
     ct:
         build: ./certificate-transparency-go/
         restart: always
+        working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
+        command: ["--install-ct", "--ctserver"]
         environment:
         - MYSQL_HOST=mysql
         - MYSQL_ROOT_PASSWORD=beeblebrox
@@ -70,6 +62,8 @@ services:
         expose:
         - '6962'
         - '6965'
+        volumes:
+        - source_code:/go
         depends_on:
         - mysql
 
