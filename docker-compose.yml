@@ -1,9 +1,6 @@
 services:
     tlserver:
-        build:
-            context: ./trillian/
-            args:
-            - GOFLAGS
+        build: . 
         working_dir: /go/src/github.com/zorawar87/trillian/
         command: ["--install-trillian", "--resetdb", "--tlserver"]
         restart: always
@@ -25,12 +22,9 @@ services:
         - mysql
 
     tlsigner:
-        build:
-            context: ./trillian
-            args:
-            - GOFLAGS
+        build: . 
         working_dir: /go/src/github.com/zorawar87/trillian/
-        command: ["--createtree", "--tlsigner"]
+        command: ["--createtree","--tlsigner"]
         restart: always
         environment:
         - MYSQL_HOST=mysql
@@ -46,10 +40,10 @@ services:
         - tlserver
 
     ct:
-        build: ./certificate-transparency-go/
+        build: .
+        working_dir: /go/src/github.com/zorawar87/certificate-transparency-ct/
+        command: ["bash"]
         restart: always
-        working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
-        command: ["--install-ct", "--ctserver"]
         environment:
         - MYSQL_HOST=mysql
         - MYSQL_ROOT_PASSWORD=beeblebrox
@@ -66,6 +60,7 @@ services:
         - source_code:/go
         depends_on:
         - mysql
+        - tlserver
 
     mysql:
         image: mysql:5.7
