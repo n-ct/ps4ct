@@ -12,8 +12,6 @@ services:
         - MYSQL_DATABASE=cttest
         - MYSQL_PASSWORD=zaphod
         restart: always
-        volumes:
-        - source_code:/go/src
         depends_on:
         - mysql
 
@@ -36,8 +34,6 @@ services:
         expose:
         - '8090'
         - '8091'
-        volumes:
-        - source_code:/go/src
         depends_on:
         - mysql
 
@@ -56,8 +52,6 @@ services:
         - MYSQL_PASSWORD=zaphod
         ports:
         - '8092:8091'
-        volumes:
-        - source_code:/go/src
         depends_on:
         - mysql
 
@@ -76,8 +70,6 @@ services:
         expose:
         - '6962'
         - '6965'
-        volumes:
-        - source_code:/go/src
         depends_on:
         - mysql
 
