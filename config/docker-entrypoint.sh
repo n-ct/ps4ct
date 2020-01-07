@@ -11,8 +11,10 @@ function install_trillian(){
 }
 
 function install_ct(){
-    echo "[1 of 1] install ct_server"
+    echo "[1 of 2] install ct_server"
     go install ./trillian/ctfe/ct_server
+    echo "[2 of 2] install ct_hammer"
+    go install ./trillian/integration/ct_hammer
 }
 
 function resetdb(){
