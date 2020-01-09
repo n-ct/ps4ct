@@ -1,6 +1,9 @@
 ﻿
 Merkle tree visualizer
 
+ABOUT
+This is a program for visualizing merkle trees. As of now, there is no functionality that is known to query a MySQL database.
+
 The Merkle tree visualizer is within the trillian server files. An example of the directory is below.
 
 /go/src/github.com/zorawar87/trillian/docs/merkletree/treetex#
