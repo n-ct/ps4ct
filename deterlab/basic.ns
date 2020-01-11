@@ -1,0 +1,27 @@
+# This is a simple ns script. Comments start with #.
+set ns [new Simulator]                 
+source tb_compat.tcl
+
+# declare vname for nodes
+set nodeA [$ns node]
+set nodeB [$ns node]
+set nodeC [$ns node]
+set nodeD [$ns node]
+
+# create a p2p connection between node A and B with data loss
+set link0 [$ns duplex-link $nodeB $nodeA 30Mb 50ms DropTail]
+tb-set-link-loss $link0 0.01
+
+# create private lan connecting nodes B, C, D
+set lan0 [$ns make-lan "$nodeD $nodeC $nodeB " 100Mb 0ms]
+
+# Set the OS on a couple.
+tb-set-node-os $nodeA FBSD-STD
+tb-set-node-os $nodeC Ubuntu-STD
+
+# enable routing so that nodes that are not directly connected 
+# can still talk
+$ns rtproto Static
+
+# Go!
+$ns run
