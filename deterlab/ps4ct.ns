@@ -1,0 +1,39 @@
+# This is ns script sets up a basic testbed for PS4CT
+# v0.0.1
+set ns [new Simulator]                 
+source tb_compat.tcl
+
+# declare virtual names for a ct+trillian server
+set mysql       [$ns node]
+set tlserver    [$ns node]
+set tlsigner    [$ns node]
+set ctserver    [$ns node]
+
+# declare vnames for monitor nodes
+set monitorA    [$ns node]
+set monitorB    [$ns node]
+set monitorC    [$ns node]
+set monitorD    [$ns node]
+
+# declare bandwitdh, latency and queue type on link0
+# creates a "shaped link" between ctserver and tlserver
+set link0 [$ns duplex-link $tlserver $ctserver 30Mb 50ms DropTail]
+tb-set-link-loss $link0 0.01
+
+# create full-speed LAN between mysql, tlserver and tlsigner
+set lan0 [$ns make-lan "$tlsigner $tlserver $mysql" 100Mb 0ms]
+
+
+# Set the OS on a couple.
+# info on Ubuntu1804-STD
+# https://www.isi.deterlab.net/showosinfo.php?osid=2578
+tb-set-node-os $mysql       Ubuntu1804-STD
+tb-set-node-os $tlserver    Ubuntu1804-STD
+tb-set-node-os $tlsigner    Ubuntu1804-STD
+tb-set-node-os $ctserver    Ubuntu1804-STD
+
+# enable static routing
+$ns rtproto Static
+
+# Go!
+$ns run
