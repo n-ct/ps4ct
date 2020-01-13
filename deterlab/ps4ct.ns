@@ -1,18 +1,18 @@
 # This is ns script sets up a basic testbed for PS4CT
-# v0.0.2
+# v0.0.3
 set ns [new Simulator]                 
 source tb_compat.tcl
 
 # declare virtual names for a ct+trillian server
 set ctserverA   [$ns node]
-set ctserverB   [$ns node]
-set ctserverC   [$ns node]
+#set ctserverB   [$ns node]
+#set ctserverC   [$ns node]
 
 # declare vnames for monitor nodes
 set monitorA    [$ns node]
-set monitorB    [$ns node]
-set monitorC    [$ns node]
-set monitorD    [$ns node]
+#set monitorB    [$ns node]
+#set monitorC    [$ns node]
+#set monitorD    [$ns node]
 
 # declare bandwitdh, latency and queue type on link0
 # creates a "shaped link" between ctserver and tlserver
@@ -20,17 +20,18 @@ set monitorD    [$ns node]
 #tb-set-link-loss $link0 0.01
 
 # create full-speed LAN/WAN between all nodes
-set lan0 [$ns make-lan "$ctserverA $ctserverB $ctserverC $monitorA monitorB monitorC monitorD" 100Mb 0ms]
+#set lan0 [$ns make-lan "$ctserverA $ctserverB $ctserverC $monitorA $monitorB $monitorC $monitorD" 100Mb 0ms]
+set lan0 [$ns make-lan "$ctserverA $monitorA" 100Mb 0ms]
 
 # Set Ubuntu1804-STD as the OS on the nodes
 # https://www.isi.deterlab.net/showosinfo.php?osid=2578
 tb-set-node-os $ctserverA   Ubuntu1804-STD
-tb-set-node-os $ctserverB   Ubuntu1804-STD
-tb-set-node-os $ctserverC   Ubuntu1804-STD
+#tb-set-node-os $ctserverB   Ubuntu1804-STD
+#tb-set-node-os $ctserverC   Ubuntu1804-STD
 tb-set-node-os $monitorA    Ubuntu1804-STD
-tb-set-node-os $monitorB    Ubuntu1804-STD
-tb-set-node-os $monitorC    Ubuntu1804-STD
-tb-set-node-os $monitorD    Ubuntu1804-STD
+#tb-set-node-os $monitorB    Ubuntu1804-STD
+#tb-set-node-os $monitorC    Ubuntu1804-STD
+#tb-set-node-os $monitorD    Ubuntu1804-STD
 
 # enable static routing
 $ns rtproto Static
