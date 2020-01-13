@@ -28,7 +28,10 @@ You will need to go into the ~/root/ directory.
  'touch watchlist'
  'apt update && apt install vim'
  'vim watchlist'
+ 
+ 
  Add in the dns for the domains you wish to watch, wild cards are accepted. (see example below)
+ Although not documented ( it is in cmd/certspotter/main.go line: 89-90), you can also just put a '.' in the watchlist, and it will return all the certificates that it acquires. 
  
 *.google.com
 
