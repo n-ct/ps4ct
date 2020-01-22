@@ -1,4 +1,10 @@
 services:
+    monitor:
+        build: ./monitor
+        restart: always
+        depends_on:
+            - tlsigner
+
     tlserver:
         build: . 
         working_dir: /go/src/github.com/zorawar87/trillian/
@@ -39,10 +45,10 @@ services:
         depends_on:
         - tlserver
 
-    ct:
+    ctserver:
         build: .
         working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
-        command: ["bash"]
+        command: ["bash", "--install-ct", "--ctserver"]
         restart: always
         environment:
         - MYSQL_HOST=mysql
@@ -61,6 +67,7 @@ services:
         depends_on:
         - mysql
         - tlserver
+        - tlsigner
 
     mysql:
         image: mysql:5.7

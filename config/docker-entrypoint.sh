@@ -35,13 +35,18 @@ function tlserver(){
 }
 
 function tlsigner(){
+    sleep 30
     echo "starting tlsigner..."
     sh -c "trillian_log_signer --config=/signer.cfg"
 }
 
-function ctserver(){
+function ctserver_demo(){
     echo "ct_server is (probably) good to go!"
     sh -c "./trillian/integration/demo-script.sh"
+}
+
+function ctserver(){
+    echo "starting ctserver"
 }
 
 while test $# -gt 0
@@ -64,6 +69,10 @@ do
         --tlsigner) tlsigner
             ;;
         --ctserver) ctserver
+            ;;
+        --ctserver-demo) ctserver_demo
+            ;;
+        -h) echo "/docker-entrypoint.sh [--install-trillian|--install-ct|--resetdb|--createtree|--tlserver|--tlsigner|--ctserver] [mysql|bash]"
             ;;
         *) echo "ignoring argument $1"
             ;;
