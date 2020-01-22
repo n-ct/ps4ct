@@ -14,15 +14,15 @@ This repo uses submodules, and should be cloned as `git clone --recurse-submodul
 
 *Note*: `alias dc=docker-compose`
 
-0. Build docker images `dc build`
-1. Start CT-server Container `dc run ctserver`. This starts and configures mysql and a trillian log server automatically. 
-2. Wait for ~2m. Check `dc logs tlserver` and `dc logs tlsigner`. Installation should complete, 
-3. In the CT-server shell, run `/docker-entrypoint.sh --install-ct --ctserver-demo`. This runs the demo-script and should print successful output.
+0. (If needed) `dc down -v --rmi all && yes | d system prune && yes | d volume prune`
+1. Build docker images `dc build`
+2. Start Log Server and CT server `dc up tlserver ctserver` (mysql and tlsigner are automatically setup in the background)
+3. Open a shell to the monitor `dc run monitor bash`
 
 ### Troublshooting ###
-Run the following commands if docker does not work as expected. this will wipe the docker slate clean
-
+1. wipe the docker-slate clean ("factory reset")
 ```
 dc down -v --rmi all && yes | d system prune && yes | d volume prune
-
 ```
+
+
