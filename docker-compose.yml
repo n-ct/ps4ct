@@ -48,7 +48,7 @@ services:
     ctserver:
         build: .
         working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
-        command: ["bash", "--install-ct", "--ctserver"]
+        command: ["--install-ct", "--ctserver"]
         restart: always
         environment:
         - MYSQL_HOST=mysql

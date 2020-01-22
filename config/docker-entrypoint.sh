@@ -3,9 +3,9 @@ set -e
 
 function install_trillian(){
     echo "[1 of 3] installing tlserver"
-    go install ./server/trillian_log_server
+    go install ./cmd/trillian_log_server
     echo "[2 of 3] installing tlsigner"
-    go install ./server/trillian_log_signer
+    go install ./cmd/trillian_log_signer
     echo "[3 of 3] installing create-tree utility"
     go install ./cmd/createtree
 }
@@ -35,9 +35,8 @@ function tlserver(){
 }
 
 function tlsigner(){
-    sleep 30
-    echo "starting tlsigner..."
-    sh -c "trillian_log_signer --config=/signer.cfg"
+    echo "waiting for tlserver to be setup"
+    sh -c "/wait-for-it.sh -t 0 tlserver:8090 -- echo 'tlserver is up' && trillian_log_signer --config=/signer.cfg"
 }
 
 function ctserver_demo(){
@@ -46,7 +45,8 @@ function ctserver_demo(){
 }
 
 function ctserver(){
-    echo "starting ctserver"
+    echo "waiting for tlserver to be setup"
+    sh -c "/wait-for-it.sh -t 0 tlserver:8090 -- echo 'tlserver is up' && ./trillian/integration/demo-run-ct.sh"
 }
 
 while test $# -gt 0
