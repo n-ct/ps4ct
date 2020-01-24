@@ -49,6 +49,17 @@ function ctserver(){
     sh -c "/wait-for-it.sh -t 0 tlserver:8090 -- echo 'tlserver is up' && ./trillian/integration/demo-run-ct.sh"
 }
 
+function gosminserver(){
+    echo "generating gosmin.cfg"
+    sed "s/@SERVER@/ctserver:6965/" ./trillian/integration/gosmin.cfg > "/gosmin.cfg"
+
+    echo "installing gosmin"
+    go install ./gossip/minimal/gosmin
+
+    echo "starting gosmin server"
+    gosmin --config=/gosmin.cfg --metrics_endpoint=localhost:6962 --alsologtostderr -v=1
+}
+
 while test $# -gt 0
 do
     case "$1" in
@@ -69,6 +80,8 @@ do
         --tlsigner) tlsigner
             ;;
         --ctserver) ctserver
+            ;;
+        --gosmin) gosminserver
             ;;
         --ctserver-demo) ctserver_demo
             ;;
