@@ -46,7 +46,8 @@ function ctserver_demo(){
 
 function ctserver(){
     echo "waiting for tlserver to be setup"
-    sh -c "/wait-for-it.sh -t 0 tlserver:8090 -- echo 'tlserver is up' && ./trillian/integration/demo-run-ct.sh"
+    ## Changed from demo-run-ct.sh to demo-script.sh
+    sh -c "/wait-for-it.sh -t 0 tlserver:8090 -- echo 'tlserver is up' && ./trillian/integration/demo-script.sh"
 }
 
 function gosminserver(){
