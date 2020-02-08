@@ -1,5 +1,11 @@
 services:
-    monitor:
+    monitora:
+        build: ./monitor
+        restart: always
+        depends_on:
+            - tlsigner
+
+    monitorb:
         build: ./monitor
         restart: always
         depends_on:
@@ -13,7 +19,7 @@ services:
         volumes:
         - source_code:/go
         depends_on:
-        - ctserver
+        - tlsigner
 
     tlserver:
         build: . 
