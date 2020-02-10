@@ -14,7 +14,7 @@ services:
     gosmin:
         build: .
         working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
-        command: ["bash"]
+        command: ["--gosmin"]
         restart: always
         volumes:
         - source_code:/go

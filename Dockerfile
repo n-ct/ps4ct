@@ -18,7 +18,7 @@ RUN go mod download
 ADD certificate-transparency-go ./
 
 # copy configuration files
-COPY config/docker-entrypoint.sh config/wait-for-it.sh config/signer.cfg config/server.cfg /
+COPY config/* /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["bash"]
