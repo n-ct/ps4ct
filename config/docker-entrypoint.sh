@@ -50,13 +50,9 @@ function ctserver(){
 }
 
 function gosminserver(){
-    echo "generating gosmin.cfg"
-    sed "s/@SERVER@/ctserver:6965/" ./trillian/integration/gosmin.cfg > "/gosmin.cfg"
-
-    echo "installing gosmin"
+    echo "[1 of 1] install gosmin"
     go install ./gossip/minimal/gosmin
-
-    echo "starting gosmin server"
+    echo "Starting gosmin server..."
     gosmin --config=/gosmin.cfg --metrics_endpoint=localhost:6962 --alsologtostderr -v=1
 }
 
