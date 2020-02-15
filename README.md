@@ -7,8 +7,16 @@ This repo uses submodules, and should be cloned as `git clone --recurse-submodul
 ## Checklist ##
 [X] Trillian gRPC API\
 [X] CT <-> Trillian using default config\
-[ ] Custom CT Configuration, Keys\
+[~] Custom CT Configuration, Keys\
 [X] "One-click" Deployement
+
+## Dev/Gossip Instructions ##
+1. `gossip_master` is our new destination branch. Anything on this branch is tested and working.
+    Branch off of `gossip_master` whenever you start working on a new feature, or `git merge gossip_master`
+2. Write New Features locally, then `go build` locally to test for static errors
+3. Run `dc run gosmin bash`, test in the gossip environment
+4. Create a PR and add the entire dev team as a review
+5. Dev Team should merge into `gossip_master`
 
 ## Deploy Instructions ##
 
