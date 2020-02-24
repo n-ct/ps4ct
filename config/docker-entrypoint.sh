@@ -49,11 +49,11 @@ function ctserver(){
     sh -c "/wait-for-it.sh -t 0 tlserver:8090 -- echo 'tlserver is up' && ./trillian/integration/demo-run-ct.sh"
 }
 
-function gosminserver(){
+function gossecserver(){
     echo "[1 of 1] install gosmin"
     go install ./gossip/minimal/gosmin
-    echo "Starting gosmin server..."
-    gosmin --config=/gosmin.cfg --metrics_endpoint=localhost:6962 --alsologtostderr -v=1
+    echo "Starting gossec server..."
+    gosmin --config=/gossec.cfg --metrics_endpoint=localhost:6962 --alsologtostderr -v=1
 }
 
 while test $# -gt 0
@@ -77,7 +77,7 @@ do
             ;;
         --ctserver) ctserver
             ;;
-        --gosmin) gosminserver
+        --gossec) gossecserver
             ;;
         --ctserver-demo) ctserver_demo
             ;;
