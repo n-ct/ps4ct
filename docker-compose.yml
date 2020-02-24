@@ -11,15 +11,11 @@ services:
         depends_on:
             - tlsigner
 
-    gosmin:
+    gossec:
         build: .
         working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
-        command: ["--gosmin"]
+        command: ["--gossec"]
         restart: always
-        volumes:
-        - source_code:/go
-        depends_on:
-        - tlsigner
 
     tlserver:
         build: . 
