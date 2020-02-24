@@ -1,16 +1,4 @@
 services:
-    monitora:
-        build: ./monitor
-        restart: always
-        depends_on:
-            - tlsigner
-
-    monitorb:
-        build: ./monitor
-        restart: always
-        depends_on:
-            - tlsigner
-
     gossec:
         build: .
         working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
@@ -18,7 +6,7 @@ services:
         restart: always
 
     tlserver:
-        build: . 
+        build: .
         working_dir: /go/src/github.com/zorawar87/trillian/
         command: ["--install-trillian", "--resetdb", "--tlserver"]
         restart: always
@@ -40,7 +28,7 @@ services:
         - mysql
 
     tlsigner:
-        build: . 
+        build: .
         working_dir: /go/src/github.com/zorawar87/trillian/
         command: ["--tlsigner"]
         restart: always
@@ -103,4 +91,3 @@ volumes:
     source_code:
 
 version: '3'
-
