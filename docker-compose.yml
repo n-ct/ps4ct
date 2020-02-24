@@ -5,6 +5,18 @@ services:
         command: ["--gossec"]
         restart: always
 
+    gosseca:
+        build: .
+        working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
+        command: ["--gossec"]
+        restart: always
+
+    gossecb:
+        build: .
+        working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
+        command: ["--gossec"]
+        restart: always
+
     tlserver:
         build: .
         working_dir: /go/src/github.com/zorawar87/trillian/
