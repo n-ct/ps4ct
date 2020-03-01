@@ -50,7 +50,7 @@ function ctserver(){
 }
 
 function gossecserver(){
-    echo "[1 of 1] install gosmin"
+    echo "[1 of 1] (re)install gosmin"
     go install ./gossip/minimal/gosmin
     echo "Starting gossec server..."
     gosmin --config=/gossec.cfg --metrics_endpoint=localhost:6962 --alsologtostderr -v=1
@@ -81,9 +81,9 @@ do
             ;;
         --ctserver-demo) ctserver_demo
             ;;
-        -h) echo "/docker-entrypoint.sh [--install-trillian|--install-ct|--resetdb|--createtree|--tlserver|--tlsigner|--ctserver] [mysql|bash]"
+        -h) echo "/docker-entrypoint.sh [--install-trillian|--install-ct|--resetdb|--createtree|--tlserver|--tlsigner|--ctserver|--gossec] [mysql|bash]"
             ;;
-        *) echo "ignoring argument $1"
+        *) echo "ignoring argument $1; try /docker-entrypoints.sh -h"
             ;;
     esac
     shift
