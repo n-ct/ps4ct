@@ -5,20 +5,8 @@ services:
         command: ["--gossec"]
         restart: always
 
-    gosseca:
-        build: .
-        working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
-        command: ["--gossec"]
-        restart: always
-
-    gossecb:
-        build: .
-        working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
-        command: ["--gossec"]
-        restart: always
-
     tlserver:
-        build: .
+        image: zorawarx/ps4ct:1.1
         working_dir: /go/src/github.com/zorawar87/trillian/
         command: ["--install-trillian", "--resetdb", "--tlserver"]
         restart: always
@@ -38,7 +26,7 @@ services:
         - mysql
 
     tlsigner:
-        build: .
+        image: zorawarx/ps4ct:1.1
         working_dir: /go/src/github.com/zorawar87/trillian/
         command: ["--tlsigner"]
         restart: always
