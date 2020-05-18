@@ -1,5 +1,0 @@
-Commands on how to wipe docker
-
-docker-compose down --rmi all
-docker system prune
-Docker volume prune
