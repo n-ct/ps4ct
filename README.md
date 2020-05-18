@@ -1,5 +1,5 @@
 # Provable Security For Certificate Transparency #
-The PS4CT repository contains configuration files and references to the certificate-transparency-go and trillian library. This allows ps4ct to be
+The PS4CT repository contains configuration files and references our certificate-transparency-go fork and google's trillian library as git submodules.
 
 ## Configure Development Environment ##
 These instructions are tested on Ubuntu 18.02. They should work fine with Mac/Linux but will probably need modifications for Windows. On Windows, using the WSL shelll is recommended.
@@ -7,7 +7,9 @@ These instructions are tested on Ubuntu 18.02. They should work fine with Mac/Li
 1. Install Go 1.12
 ```
 On Windows: Read https://github.com/golang/go/wiki/Windows
-On Mac/Linux: curl -LO https://get.golang.org/$(uname)/go_installer && chmod +x go_installer && ./go_installer -version 1.12 && rm go_installer
+On Mac/Linux: curl -LO https://get.golang.org/$(uname)/go_installer\
+              && chmod +x go_installer &&\
+              ./go_installer -version 1.12 && rm go_installer
 ```
 2. Save Environment Variables
 ```
@@ -26,7 +28,7 @@ cd ./ps4ct && git submodule update --remote
 ```
 cd ./certificate-transparency-go && go mod download
 ```
-5. Verify tests
+5. Verify tests. Tests will fail if the `gcc` binary is not available but it in unlikely. Use `sudo apt update install gcc` for Ubuntu
 ```
 go test ./...
 ```
