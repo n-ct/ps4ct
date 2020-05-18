@@ -2,7 +2,7 @@
 The PS4CT repository contains configuration files and references to the certificate-transparency-go and trillian library. This allows ps4ct to be
 
 ## Configure Development Environment ##
-These instructions are tested on Ubuntu 18.02. They should work fine with Mac/Linux but will probably need modifications for Windows. On Windows, using the WSL shelll is recommended.
+These instructions are tested on Ubuntu 18.02. They should work fine with Mac/Linux but will probably need modifications for Windows. On Windows, using the WSL shell is recommended.
 
 1. Install Go 1.12
 ```
@@ -18,7 +18,7 @@ echo "export GO111MODULE=on" >> ~/.bash_profile && source ~/.bash_profile
 Via SSH: git clone --recursive git@github.com:zorawar87/ps4ct.git
 Via HTTPS: git clone --recursive https://github.com/zorawar87/ps4ct.git
 ```
-4. Update the submodules (ct-go and trillian)
+4. Update the sub-modules (ct-go and trillian)
 ```
 cd ./ps4ct && git submodule update --remote
 ```
@@ -32,7 +32,7 @@ go test ./...
 ```
 
 ## Running/Deployment Instructions ##
-`Docker` allows software to be within a container by following steps from a `Dockerfile`. The advantage is that when running a system, docker automatically installs dependendencies and configured a system.
+`Docker` allows software to be within a container by following steps from a `Dockerfile`. The advantage is that when running a system, docker automatically installs dependencies and configured a system.
 
 `Docker-Compose` allows managing multiple Docker containers as defined in `docker-compose.yml`.
 
