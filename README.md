@@ -52,9 +52,19 @@ go test ./...
    - Bash Shell into CTServer Container: `docker-compose run ctserver bash`
    - MySQL Shell connected to the CTServer (and other services): `docker-compose run ctserver mysql`
 
+### When deploying to production ###
+_These instructions only apply, when docker-compose is set up on a server machine._
+* To deploy a logger:
+  1. SSH into a remote machine
+  2. Start the ctserver service in the background `dc up ctserver`
+  3. Once the logs prove that the system is running ok, background the process by hitting `ctrl+z`
+  4. Detach the process from the current shell `disown -h`
+  5. Log off from the SSH session and try to connect to the ct instance on the remote machine. Make sure that the remote machine allows inbound requests on relevant ports.
+
 ### Docker Tips and Troubleshooting ###
 * by adding `alias d=docker` and `alias dc=docker-compose`, the commands can be invoked by `d` and `dc` resp.
 * Docker may need to be run as root if the post-install configuration was not completed. run with `sudo docker ...` or `sudo docker-compose ...`
 * Sometimes docker complains about a compose_timeout. try `dc up ...` again or increase the timeout `export COMPOSE_HTTP_TIMEOUT=120` and try again.
 * Delete Local Docker images and volumes `dc down -v --rmi local`
 * Clear docker system and volume cache  `yes | d system prune && yes | d volume prune`
+* Clear all docker images and containers not in use `yes | d system prune -a`
