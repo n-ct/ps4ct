@@ -1,16 +1,19 @@
 #!/bin/bash
 
 ctservera="40.71.200.117"
+ctserverb="13.92.181.187"
 athos="athos"
-ctserverb="13.90.199.163"
-porthos="porthos"
+gctserver="https://ct.googleapis.com/logs"
+argon="argon2020"
+cfctserver="https://ct.cloudflare.com/logs"
+nimbus="nimbus2020"
 
 
 function newline(){ echo ""; }
 
 function get(){
     # $1 => IP, $2 = prefix, $3 = operation, $4=verbose
-    url="$1:6965/$2/ct/v1/$3"
+    url="$1/$2/ct/v1/$3"
     echo "--> GET $url"
     if [[ "$4" == "-v" ]]; then
         curl -v $url && newline
@@ -19,30 +22,32 @@ function get(){
     fi
 }
 
-function get-sth (){
-    url="$1:6965/$2/ct/v1/get-sth"
-    echo "--> Getting STH for $2 on $1"
-    curl $url && newline
-}
-
 function trillian() {
     url="$1:8091/metrics"
-    echo "--> :8091 GET $url"
+    echo "--> GET $url"
     curl -v $url && newline
 }
 
 while test $# -gt 0
 do
     case "$1" in
-        a) get-sth $ctservera $athos
+        a) get $ctservera":6965" $athos "get-sth"
             ;;
-        b) get-sth $ctserverb $porthos
+        b) get $ctserverb":6965" $athos "get-sth"
             ;;
-        av) get $ctservera $athos "get-sth" "-v"
+        c) get $cfctserver $nimbus "get-sth"
             ;;
-        bv) get $ctserverb $porthos "get-sth" "-v"
+        g) get $gctserver $argon "get-sth"
             ;;
-        bt) trillian $ctserverb 
+        av) get $ctservera":6965" $athos "get-sth" "-v"
+            ;;
+        bv) get $ctserverb":6965" $porthos "get-sth" "-v"
+            ;;
+        cv) get $cfctserver $nimbus "get-sth" "-v"
+            ;;
+        gv) get $gctserver $argon "get-sth" "-v"
+            ;;
+        bt) trillian $ctserverb
             ;;
         at) trillian $ctservera
             ;;

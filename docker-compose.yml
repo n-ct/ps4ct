@@ -5,20 +5,8 @@ services:
         command: ["--gossec"]
         restart: always
 
-    gosseca:
-        build: .
-        working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
-        command: ["--gossec"]
-        restart: always
-
-    gossecb:
-        build: .
-        working_dir: /go/src/github.com/zorawar87/certificate-transparency-go/
-        command: ["--gossec"]
-        restart: always
-
     tlserver:
-        build: .
+        image: zorawarx/ps4ct:1.1
         working_dir: /go/src/github.com/zorawar87/trillian/
         command: ["--install-trillian", "--resetdb", "--tlserver"]
         restart: always
@@ -34,13 +22,11 @@ services:
         expose:
         - '8090'
         - '8091'
-        volumes:
-        - source_code:/go
         depends_on:
         - mysql
 
     tlsigner:
-        build: .
+        image: zorawarx/ps4ct:1.1
         working_dir: /go/src/github.com/zorawar87/trillian/
         command: ["--tlsigner"]
         restart: always
@@ -52,8 +38,6 @@ services:
         - MYSQL_PASSWORD=zaphod
         ports:
         - '8092:8091'
-        volumes:
-        - source_code:/go
         depends_on:
         - tlserver
 
@@ -74,8 +58,6 @@ services:
         expose:
         - '6962'
         - '6965'
-        volumes:
-        - source_code:/go
         depends_on:
         - tlserver
         - tlsigner
@@ -94,12 +76,5 @@ services:
         - '3306:3306'
         expose:
         - '3306'
-        volumes:
-        - data_volume:/data/db
-
-
-volumes:
-    data_volume:
-    source_code:
 
 version: '3'
