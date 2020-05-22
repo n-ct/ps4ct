@@ -1,4 +1,4 @@
-FROM golang:1.12
+FROM golang:1.11
 
 RUN apt update -qq
 RUN apt install -y default-mysql-client-core lsof vim
