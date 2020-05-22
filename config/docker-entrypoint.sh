@@ -11,10 +11,12 @@ function install_trillian(){
 }
 
 function install_ct(){
-    echo "[1 of 2] install ct_server"
+    echo "[1 of 3] install ct_server"
     go install ./trillian/ctfe/ct_server
-    echo "[2 of 2] install ct_hammer"
+    echo "[2 of 3] install ct_hammer"
     go install ./trillian/integration/ct_hammer
+    echo "[3 of 3] install ct_hammer"
+    go install github.com/google/trillian/cmd/createtree
 }
 
 function resetdb(){
