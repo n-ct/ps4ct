@@ -68,3 +68,25 @@ _These instructions only apply, when docker-compose is set up on a server machin
 * Delete Local Docker images and volumes `dc down -v --rmi local`
 * Clear docker system and volume cache  `yes | d system prune && yes | d volume prune`
 * Clear all docker images and containers not in use `yes | d system prune -a`
+
+## Adding a new, real Source Log ##
+To the appropriate config file (such as `gossec.cfg`), copy the format for a source log. Use information from the [List of Known Logs](https://www.gstatic.com/ct/log_list/v2/log_list.json).
+1. Modify the Name, URL, and MMD (min_req_interval)
+2. Copy the ECDSA Public Key (in Base64 format)
+3. Convert it to hex using a service like [this one](https://base64.guru/converter/decode/hex). Set the delimiter to '\x'
+4. Paste the key in the config under `public_key > der` and make sure it follows the `\xNN\xNN.....\xNN` format
+
+## CT Hammer ##
+This needs to be run from the CT repo within the GOPATH structure.
+1. Launch a gossec shell with `dc run gossec bash`. The only reason we need this shell is because the script requires the GOPATH setup (used in Go1.11 and before) but the ct-go/ps4ct repo setup does not.
+2. Modify the `./trillian/integration/demo-hammer.sh` script with:
+  * `tree_id` => obtain by ssh-ing to `ctservera`. Then, `dc logs ctserver | head -20 | grep tree_id`
+  * `server_ip` => as of writing, `athos` is available at `40.71.200.117`
+  * `prefix` => `athos`
+3. Run `./trillian/integration/demo-hammer.sh` from the ct-go project root.
+4. Periodically, the file will show how many certificates are on the server. Stop at an appropriate number.
+
+## Gossip ##
+### gRPC Calls ###
+- turn on debugging with these env variables: `GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info`
+- 
