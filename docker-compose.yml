@@ -28,7 +28,7 @@ services:
     tlsigner:
         image: zorawarx/ps4ct:1.1
         working_dir: /go/src/github.com/zorawar87/trillian/
-        command: ["--tlsigner"]
+        command: ["--install-trillian", "--tlsigner"]
         restart: always
         environment:
         - MYSQL_HOST=mysql
