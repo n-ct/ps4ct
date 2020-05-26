@@ -70,7 +70,7 @@ _These instructions only apply, when docker-compose is set up on a server machin
 * Clear all docker images and containers not in use `yes | d system prune -a`
 
 ## Adding a new, real Source Log ##
-To the appropriate config file (such as `gossec.cfg`), copy the format for a source log. Use information from the [List of Known Logs](https://www.gstatic.com/ct/log_list/v2/log_list.json).
+To the appropriate config file (such as `gossec.cfg`), copy the format for a source log. Use information from the [Official list of Known Logs](https://www.gstatic.com/ct/log_list/v2/log_list.json).
 1. Modify the Name, URL, and MMD (min_req_interval)
 2. Copy the ECDSA Public Key (in Base64 format)
 3. Convert it to hex using a service like [this one](https://base64.guru/converter/decode/hex). Set the delimiter to '\x'
