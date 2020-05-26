@@ -68,6 +68,8 @@ _These instructions only apply, when docker-compose is set up on a server machin
 * Delete Local Docker images and volumes `dc down -v --rmi local`
 * Clear docker system and volume cache  `yes | d system prune && yes | d volume prune`
 * Clear all docker images and containers not in use `yes | d system prune -a`
+* Upgrade computer (and restart): `sudo apt update && sudo apt upgrade`
+* Make sure docker is being run as root: `sudo groupadd docker && sudo usermod -a -G docker <username>`
 
 ## Adding a new, real Source Log ##
 To the appropriate config file (such as `gossec.cfg`), copy the format for a source log. Use information from the [Official list of Known Logs](https://www.gstatic.com/ct/log_list/v2/log_list.json).
@@ -89,4 +91,3 @@ This needs to be run from the CT repo within the GOPATH structure.
 ## Gossip ##
 ### gRPC Calls ###
 - turn on debugging with these env variables: `GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info`
-- 
