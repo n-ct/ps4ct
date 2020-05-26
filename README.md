@@ -68,3 +68,4 @@ _These instructions only apply, when docker-compose is set up on a server machin
 * Delete Local Docker images and volumes `dc down -v --rmi local`
 * Clear docker system and volume cache  `yes | d system prune && yes | d volume prune`
 * Clear all docker images and containers not in use `yes | d system prune -a`
+* Compose build docker error at step 7 because of permission denied into the folder sudo apt-get upgrade, sudo groupadd docker, sudo usermod -a -G docker user   (user is your computer name)
