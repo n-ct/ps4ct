@@ -91,3 +91,49 @@ This needs to be run from the CT repo within the GOPATH structure.
 ## Gossip ##
 ### gRPC Calls ###
 - turn on debugging with these env variables: `GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info`
+
+## Deterlab Testing ##
+Read the [core quick-start](https://docs.deterlab.net/core/core-quickstart/) and [core guide](https://docs.deterlab.net/core/core-guide/) for official, up-to-date instructions.
+
+In our initial explorations of docker, we decided to stick to "Deterlab core" because "Deterlab Container and Orchestrator" added an extra layer of complexity that could not be justified.
+
+### Creating an Experiment ###
+An experiment is a means to test set configuration of distributed machines. The type of machines, how they are connected (networked), the latency between them and other features are specified in a Network Simulator file. See `./deterlab` or "Design the topology" section of the core guide.
+
+Our `RouteSec` project (owned by Prof. Herzberg) includes a `ps4ct` experiment that we used to get our software working on deterlab. A new experiment can also be created.
+
+"Swap In" an experiment to deploy the network topology in deterlab's cloud.
+
+### Accessing the deterlab environment ###
+#### The Control Server ####
+The "Control Server" is an internet-connected machine without sudo privileges. Any information in the home-folder, /proj, and /share (like our git repo) is mounted and accessible to experiment nodes.
+SSH into the experiment control server: `ssh <username>@users.isi.deterlab.net`
+
+#### Experiment Nodes ####
+A node is identified by `<node_name>.<experiment_name>.<project_name>.isi.deterlab.net`. From within the control server, the `isi.deterlab.net` suffix can be omitted. Experiment nodes are disconnected from the internet and are exclusively connected to the control server and other machines as specified in the experiment topology. sudo privileges are available here.
+
+SSH into an experiment node: `ssh <username>@<node_name>.<experiment_name>.<project_name>.isi.deterlab.net`
+
+The `RouteSec` project has an experiment `ps4ct`, which specifies a basic network topology including two nodes `ctservera` and `monitora`.
+
+[Read more about using nodes](https://docs.deterlab.net/core/using-nodes/)
+
+### Accessing the deterlab environment with docker enabled ###
+1. SSH into an experiment node by creating a Reverse Tunnel so that we can install a docker image from Docker Hub: `ssh -J <user_name>@users.deterlab.net -R 3128 <username>@<node_name>.<experiment_name>.<project_name>.isi.deterlab.net`
+2. On the experiment node:
+    - Install docker `sudo apt install docker.io`
+    - `sudo mkdir -p /etc/systemd/system/docker.service.d/`
+    - Configure a proxy for docker `sudo vim /etc/systemd/system/docker.service.d/https-proxy.conf` and add
+    ```
+    [Service]
+    Environment="HTTPS_PROXY=socks5://localhost:3128"
+    ```
+    - Reload the systemd config `sudo systemctl daemon-reload`
+    - Restart docker `sudo systemctl restart docker`
+    - Search Docker Hub for images `sudo docker search ps4ct`. If this works, then our proxy for docker is working successfully.
+    - Install the ps4ct image: `sudo docker pull zorawarx/ps4ct:1.1` OR build the image locally `cd ps4ct && sudo docker . -t ps4ct`
+
+See this conversation with deterlab support about using docker on deterlab: (https://trac.deterlab.net/ticket/2747)
+
+### Generate Traffic for the Experiment ###
+We switched gears before we could focus on generating traffic and actually running/measuring an experiment. There are probably simplifications and missing-steps between simply installing the ps4ct software and running a realistic experiment. [More information](https://docs.deterlab.net/core/generating-traffic/).
